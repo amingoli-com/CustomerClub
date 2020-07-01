@@ -18,20 +18,20 @@
         android:text="@string/msg_no_ticket_found"
         android:textColor="@android:color/white"
         android:padding="@dimen/dimen_20"
-        android:textSize="16dp"
+        android:textSize="@dimen/_12ssp"
         android:visibility="gone" />
 
     <amingoli.meshkatgallery.coustomerclub.util.TicketView
         android:id="@+id/layout_ticket"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dimen_20"
-        android:layout_marginRight="@dimen/dimen_20"
-        android:layout_marginTop="@dimen/dimen_20"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingTop="@dimen/dimen_10"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/director"

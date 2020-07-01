@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="dimen_20" >20dp</dimen>
-    <dimen name="dimen_10" >10dp</dimen>
-    <dimen name="activity_margin" >16dp</dimen>
-    <dimen name="lbl_directory" >14dp</dimen>
-    <dimen name="lbl_movie_name" >28dp</dimen>
-    <dimen name="img_poster_height" >220dp</dimen>
-    <dimen name="dimen_40" >40dp</dimen>
+    <dimen name="dimen_20" >@dimen/_16sdp</dimen>
+    <dimen name="dimen_10" >@dimen/_7sdp</dimen>
+    <dimen name="activity_margin" >@dimen/_14sdp</dimen>
+    <dimen name="lbl_directory" >@dimen/_12sdp</dimen>
+    <dimen name="lbl_movie_name" >@dimen/_22sdp</dimen>
+    <dimen name="img_poster_height" >@dimen/_180sdp</dimen>
+    <dimen name="dimen_40" >@dimen/_30sdp</dimen>
 </resources>
