@@ -1,4 +1,4 @@
-package amingoli.meshkatgallery.coustomerclub;
+package amingoli.meshkatgallery.coustomerclub.util;
 
 import android.app.Application;
 import android.text.TextUtils;

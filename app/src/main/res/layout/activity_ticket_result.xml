@@ -8,6 +8,6 @@
     android:background="@drawable/bg_gradient"
     android:descendantFocusability="beforeDescendants"
     android:fitsSystemWindows="true"
-    tools:context=".TicketResultActivity">
+    tools:context=".activity.TicketResultActivity">
     <include layout="@layout/content_ticket_details"/>
 </RelativeLayout>

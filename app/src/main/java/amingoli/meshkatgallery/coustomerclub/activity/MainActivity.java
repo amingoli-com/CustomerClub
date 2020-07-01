@@ -1,4 +1,4 @@
-package amingoli.meshkatgallery.coustomerclub;
+package amingoli.meshkatgallery.coustomerclub.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import amingoli.meshkatgallery.coustomerclub.R;
 
 public class MainActivity extends AppCompatActivity {
 
