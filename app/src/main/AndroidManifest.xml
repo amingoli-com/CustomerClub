@@ -12,9 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TicketActivity"></activity>
-        <activity android:name=".ScanActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".TicketActivity"
+            android:label="@string/title_activity_ticket"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
