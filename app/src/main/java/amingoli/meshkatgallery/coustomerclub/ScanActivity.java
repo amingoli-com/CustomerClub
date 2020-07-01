@@ -9,7 +9,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import java.util.List;
 import info.androidhive.barcode.BarcodeReader;
 
-public class ScanActivity extends AppCompatActivity implements BarcodeReader.BarcodeReaderListener {
+public class ScanActivity extends AppCompatActivity {
 
     BarcodeReader barcodeReader;
 
@@ -20,37 +20,36 @@ public class ScanActivity extends AppCompatActivity implements BarcodeReader.Bar
 
         // get the barcode reader instance
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_scanner);
-    }
 
-    @Override
-    public void onScanned(Barcode barcode) {
+        if (barcodeReader != null) {
+            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+            barcodeReader.setListener(new BarcodeReader.BarcodeReaderListener() {
+                @Override
+                public void onScanned(Barcode barcode) {
+                    Toast.makeText(ScanActivity.this, ""+barcode, Toast.LENGTH_SHORT).show();
+                }
 
-        // playing barcode reader beep sound
-        barcodeReader.playBeep();
+                @Override
+                public void onScannedMultiple(List<Barcode> barcodes) {
+                    Toast.makeText(ScanActivity.this, "onScannedMultiple", Toast.LENGTH_SHORT).show();
+                }
 
-        // ticket details activity by passing barcode
-        Intent intent = new Intent(ScanActivity.this, TicketResultActivity.class);
-        intent.putExtra("code", barcode.displayValue);
-        startActivity(intent);
-    }
+                @Override
+                public void onBitmapScanned(SparseArray<Barcode> sparseArray) {
+                    Toast.makeText(ScanActivity.this, "onBitmapScanned", Toast.LENGTH_SHORT).show();
+                }
 
-    @Override
-    public void onScannedMultiple(List< Barcode > list) {
+                @Override
+                public void onScanError(String errorMessage) {
+                    Toast.makeText(ScanActivity.this, "onScanError", Toast.LENGTH_SHORT).show();
+                }
 
-    }
+                @Override
+                public void onCameraPermissionDenied() {
+                    Toast.makeText(ScanActivity.this, "onCameraPermissionDenied", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
-    @Override
-    public void onBitmapScanned(SparseArray< Barcode > sparseArray) {
-
-    }
-
-    @Override
-    public void onCameraPermissionDenied() {
-        finish();
-    }
-
-    @Override
-    public void onScanError(String s) {
-        Toast.makeText(getApplicationContext(), "Error occurred while scanning " + s, Toast.LENGTH_SHORT).show();
     }
 }
