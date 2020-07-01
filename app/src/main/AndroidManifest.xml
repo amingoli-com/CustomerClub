@@ -3,9 +3,14 @@
     package="amingoli.meshkatgallery.coustomerclub">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true"/>
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MyApplication"
@@ -15,9 +20,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ScanActivity"/>
+
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode"/>
+            android:value="barcode" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -28,14 +36,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScanActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
             android:name=".TicketResultActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

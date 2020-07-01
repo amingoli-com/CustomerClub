@@ -1,10 +1,15 @@
 package amingoli.meshkatgallery.coustomerclub;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,7 +35,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private static final String TAG = TicketResultActivity.class.getSimpleName();
 
     // url to search barcode
-    private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=";
+    private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=dunkirk";
 
     private TextView txtName, txtDuration, txtDirector, txtGenre, txtRating, txtPrice, txtError;
     private ImageView imgPoster;
@@ -41,11 +46,8 @@ public class TicketResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        transparentToolbar();
         setContentView(R.layout.activity_ticket_result);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtName = findViewById(R.id.name);
         txtDirector = findViewById(R.id.director);
@@ -70,6 +72,7 @@ public class TicketResultActivity extends AppCompatActivity {
 
         // search the barcode
         searchBarcode(barcode);
+        Toast.makeText(this, barcode, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -80,7 +83,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private void searchBarcode(String barcode) {
         // making volley's json request
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                URL + barcode, null,
+                URL , null,
                 new Response.Listener< JSONObject >() {
 
                     @Override
@@ -207,5 +210,28 @@ public class TicketResultActivity extends AppCompatActivity {
         public boolean isReleased() {
             return isReleased;
         }
+    }
+
+    private void transparentToolbar() {
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+        }
+        if (Build.VERSION.SDK_INT >= 19) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+    private void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 }
