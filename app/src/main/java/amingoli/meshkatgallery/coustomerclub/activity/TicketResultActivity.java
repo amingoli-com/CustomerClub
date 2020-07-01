@@ -1,4 +1,4 @@
-package amingoli.meshkatgallery.coustomerclub;
+package amingoli.meshkatgallery.coustomerclub.activity;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -30,6 +29,10 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
+
+import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.MyApplication;
+import amingoli.meshkatgallery.coustomerclub.util.TicketView;
 
 public class TicketResultActivity extends AppCompatActivity {
     private static final String TAG = TicketResultActivity.class.getSimpleName();

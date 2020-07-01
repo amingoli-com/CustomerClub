@@ -1,4 +1,4 @@
-package amingoli.meshkatgallery.coustomerclub;
+package amingoli.meshkatgallery.coustomerclub.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
