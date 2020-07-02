@@ -53,7 +53,7 @@ public class TicketResultActivity extends AppCompatActivity {
 
     private SQLiteDatabase writeDatabase, readDatabase;
     private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=dunkirk";
-    private TextView crated_at,txtName, txtDuration, txtDirector, txtGenre, txtRating, txtPrice, txtError;
+    private TextView crated_at,txtName, txtDuration,qr_code, txtDirector, txtGenre, txtRating, txtPrice, txtError;
     private ImageView imgPoster;
     private Button btnBuy;
     private ProgressBar progressBar;
@@ -134,6 +134,7 @@ public class TicketResultActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=1 || !getTextEditText(orderPrice).startsWith("0")){
                             Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode);
+                            Toast.makeText(TicketResultActivity.this, getTextEditText(orderPrice), Toast.LENGTH_SHORT).show();
                             searchBarcode();
                         }else {
                             Toast.makeText(TicketResultActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
@@ -198,7 +199,7 @@ public class TicketResultActivity extends AppCompatActivity {
     }
 
     private String getTextEditText(EditText editText){
-        return editText.getText().toString().trim();
+        return editText.getText().toString().trim().replace(",","");
     }
 
     private void searchBarcode() {
@@ -229,6 +230,7 @@ public class TicketResultActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void renderMovie(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
         setImage(barcode);
+        qr_code.setText(barcode);
         crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
         txtName.setText(name);
         txtDirector.setText(FaNum.convert(tel));
@@ -267,6 +269,7 @@ public class TicketResultActivity extends AppCompatActivity {
             int width = point.x;
             int height = point.y;
             int smallerDimension = Math.min(width, height);
+            smallerDimension = smallerDimension*2;
 
             QRGEncoder qrgEncoder = new QRGEncoder(
                     barcode, null,
@@ -317,6 +320,7 @@ public class TicketResultActivity extends AppCompatActivity {
         txtPrice = findViewById(R.id.price);
         txtRating = findViewById(R.id.rating);
         imgPoster = findViewById(R.id.poster);
+        qr_code = findViewById(R.id.qr_code);
         txtGenre = findViewById(R.id.genre);
         btnBuy = findViewById(R.id.btn_buy);
         imgPoster = findViewById(R.id.poster);
