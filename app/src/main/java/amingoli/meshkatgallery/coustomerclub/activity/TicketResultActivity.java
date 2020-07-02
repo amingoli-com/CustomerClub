@@ -1,6 +1,7 @@
 package amingoli.meshkatgallery.coustomerclub.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -15,11 +16,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -33,6 +37,8 @@ import com.google.gson.annotations.SerializedName;
 import com.google.zxing.WriterException;
 
 import org.json.JSONObject;
+
+import java.util.Date;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.MyApplication;
@@ -75,11 +81,8 @@ public class TicketResultActivity extends AppCompatActivity {
         if (barcodeWasSaved()){
             Toast.makeText(this, "OK "+barcode, Toast.LENGTH_SHORT).show();
         }else {
-            Query.insert_qrCode(writeDatabase,barcode,"2020-04-01","محمد امین","09195191378","عشقه");
+            addQrCode();
         }
-
-
-
     }
 
     @Override
@@ -91,15 +94,25 @@ public class TicketResultActivity extends AppCompatActivity {
 
 
 
-    private boolean barcodeWasSaved(){
-        Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
-        return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
-    }
 
-    private Cursor inser(){
-         return writeDatabase.rawQuery(Query.select_qrCode(barcode),null);
-    }
 
+    private void addQrCode(){
+        final Date date = new Date();
+        View view = View.inflate(this, R.layout.content_dialog_add_qrcode, null);
+        final EditText name = view.findViewById(R.id.name);
+        final EditText tel = view.findViewById(R.id.tel);
+        final EditText desc = view.findViewById(R.id.desc);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("اطلاعات بارکد را وارد کنید");
+        builder.setMessage(barcode)
+                .setView(view)
+                .setCancelable(false)
+                .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Query.insert_qrCode(writeDatabase,barcode,String.valueOf(date.getTime()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                    }
+                }).show();
+    }
 
 
 
@@ -108,6 +121,22 @@ public class TicketResultActivity extends AppCompatActivity {
      * Request was made using Volley network library but the library is
      * not suggested in production, consider using Retrofit
      */
+
+
+    private boolean barcodeWasSaved(){
+        Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
+        return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
+    }
+
+    private Cursor inser(){
+        return writeDatabase.rawQuery(Query.select_qrCode(barcode),null);
+    }
+
+
+    private String getTextEditText(EditText editText){
+        return editText.getText().toString().trim();
+    }
+
     private void searchBarcode(String barcode) {
         // making volley's json request
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
