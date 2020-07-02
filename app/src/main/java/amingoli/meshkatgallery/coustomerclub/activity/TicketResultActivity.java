@@ -1,12 +1,15 @@
 package amingoli.meshkatgallery.coustomerclub.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,7 +19,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -27,21 +29,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import com.google.zxing.WriterException;
-
-import org.json.JSONObject;
 
 import java.util.Date;
 
 import amingoli.meshkatgallery.coustomerclub.R;
-import amingoli.meshkatgallery.coustomerclub.util.MyApplication;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
 import amingoli.meshkatgallery.coustomerclub.util.database.Query;
@@ -76,10 +68,10 @@ public class TicketResultActivity extends AppCompatActivity {
         }
 
         // search the barcode
-        searchBarcode(barcode);
+
 
         if (barcodeWasSaved()){
-            Toast.makeText(this, "OK "+barcode, Toast.LENGTH_SHORT).show();
+            searchBarcode();
         }else {
             addQrCode();
         }
@@ -137,35 +129,20 @@ public class TicketResultActivity extends AppCompatActivity {
         return editText.getText().toString().trim();
     }
 
-    private void searchBarcode(String barcode) {
-        // making volley's json request
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                URL , null,
-                new Response.Listener< JSONObject >() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e(TAG, "Ticket response: " + response.toString());
-
-                        // check for success status
-                        if (!response.has("error")) {
-                            // received movie response
-                            renderMovie(response);
-                        } else {
-                            // no movie found
-                            showNoTicket();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Error: " + error.getMessage());
-                showNoTicket();
-            }
-        });
-
-        MyApplication.getInstance().addToRequestQueue(jsonObjReq);
+    private void searchBarcode() {
+        @SuppressLint("Recycle")
+        Cursor cursor = Query.cursor(readDatabase,Query.select_qrCode(barcode));
+        if (cursor.getCount()>=1){
+            cursor.moveToFirst();
+            String qrcode = cursor.getString( cursor.getColumnIndex("qrcode") );
+            int crated_at = cursor.getInt( cursor.getColumnIndex("crated_at") );
+            String name = cursor.getString( cursor.getColumnIndex("name") );
+            String tel = cursor.getString( cursor.getColumnIndex("tel") );
+            String desc = cursor.getString(cursor.getColumnIndex("desc") );
+            renderMovie(qrcode,name,tel, String.valueOf(crated_at),desc,"۳۴۵,۰۰۰","۲۸ مرتبه");
+        }else {
+            showNoTicket();
+        }
     }
 
     private void showNoTicket() {
@@ -177,120 +154,52 @@ public class TicketResultActivity extends AppCompatActivity {
     /**
      * Rendering movie details on the ticket
      */
-    private void renderMovie(JSONObject response) {
+    private void renderMovie(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
+        setImage(barcode);
+        txtName.setText(name);
+        txtDirector.setText(tel);
+        txtDuration.setText(desc);
+        txtGenre.setText(date);
+        txtRating.setText(totalRecord);
+        txtPrice.setText(totalPrice);
+        btnBuy.setText(getString(R.string.btn_buy_now));
+        btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+        ticketView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
+        txtDirector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+tel));
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setImage(String barcode){
         try {
-
-            // converting json to movie object
-            Movie movie = new Gson().fromJson(response.toString(), Movie.class);
-
-            if (movie != null) {
-                try {
-                    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                    Display display = manager != null ? manager.getDefaultDisplay() : null;
-                    Point point = new Point();
-                    if (display != null) display.getSize(point);
-                    int width = point.x;
-                    int height = point.y;
-                    int smallerDimension = Math.min(width, height);
+            WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            Display display = manager != null ? manager.getDefaultDisplay() : null;
+            Point point = new Point();
+            if (display != null) display.getSize(point);
+            int width = point.x;
+            int height = point.y;
+            int smallerDimension = Math.min(width, height);
 //                    smallerDimension = smallerDimension / 3;
 
-                    QRGEncoder qrgEncoder = new QRGEncoder(
-                            barcode, null,
-                            QRGContents.Type.TEXT,
-                            smallerDimension);
-                    Bitmap bitmap = qrgEncoder.encodeAsBitmap();
-                    imgPoster.setImageBitmap(bitmap);
-                } catch (WriterException e) {
-                    Log.v(TAG, e.toString());
-                }
-
-
-                txtName.setText(movie.getName());
-                txtDirector.setText(movie.getDirector());
-                txtDuration.setText(movie.getDuration());
-                txtGenre.setText(movie.getGenre());
-                txtRating.setText("" + movie.getRating());
-                txtPrice.setText(movie.getPrice());
-//                Glide.with(this).load(movie.getPoster()).into(imgPoster);
-
-                if (movie.isReleased()) {
-                    btnBuy.setText(getString(R.string.btn_buy_now));
-                    btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                } else {
-                    btnBuy.setText(getString(R.string.btn_coming_soon));
-                    btnBuy.setTextColor(ContextCompat.getColor(this, R.color.btn_disabled));
-                }
-                ticketView.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-
-
-                btnBuy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-
-            } else {
-                // movie not found
-                showNoTicket();
-            }
-        } catch (JsonSyntaxException e) {
-            Log.e(TAG, "JSON Exception: " + e.getMessage());
-            showNoTicket();
-            Toast.makeText(getApplicationContext(), "Error occurred. Check your LogCat for full report", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            // exception
-            showNoTicket();
-            Toast.makeText(getApplicationContext(), "Error occurred. Check your LogCat for full report", Toast.LENGTH_SHORT).show();
+            QRGEncoder qrgEncoder = new QRGEncoder(
+                    barcode, null,
+                    QRGContents.Type.TEXT,
+                    smallerDimension);
+            Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+            imgPoster.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            Log.v(TAG, e.toString());
         }
     }
-
-    private class Movie {
-        String name;
-        String director;
-        String poster;
-        String duration;
-        String genre;
-        String price;
-        float rating;
-
-        @SerializedName("released")
-        boolean isReleased;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDirector() {
-            return director;
-        }
-
-        public String getPoster() {
-            return poster;
-        }
-
-        public String getDuration() {
-            return duration;
-        }
-
-        public String getGenre() {
-            return genre;
-        }
-
-        public String getPrice() {
-            return price;
-        }
-
-        public float getRating() {
-            return rating;
-        }
-
-        public boolean isReleased() {
-            return isReleased;
-        }
-
-    }
+    
 
     //  making toolbar transparent
     private void TRANSPARENTTOOLBAR() {

@@ -53,10 +53,12 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textAllCaps="true"
+            android:textAlignment="center"
+            android:textStyle="bold"
             android:textColor="#111"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textSize="@dimen/lbl_movie_name" />
+            android:textSize="@dimen/_16ssp" />
 
         <ImageView
             android:id="@+id/poster"
@@ -86,15 +88,17 @@
                     android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/lbl_duration"
-                    android:textSize="12dp" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/duration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/lbl_value"
-                    android:textSize="22dp" />
+                    android:textSize="@dimen/_16ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,8 +112,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-condensed"
+                    android:textAlignment="center"
                     android:text="@string/lbl_genre"
-                    android:textSize="12dp" />
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/genre"
@@ -117,8 +122,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:textAllCaps="true"
+                    android:textAlignment="center"
                     android:textColor="@color/lbl_value"
-                    android:textSize="22dp" />
+                    android:textSize="@dimen/_16ssp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -144,7 +150,8 @@
                     android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/lbl_rating"
-                    android:textSize="12dp" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/rating"
@@ -152,7 +159,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/lbl_value"
-                    android:textSize="22dp" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_16ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -167,7 +175,8 @@
                     android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/lbl_price"
-                    android:textSize="12dp" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/price"
@@ -176,7 +185,8 @@
                     android:fontFamily="sans-serif-condensed"
                     android:textAllCaps="true"
                     android:textColor="@color/lbl_value"
-                    android:textSize="22dp" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_16ssp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -196,7 +206,7 @@
         android:paddingLeft="@dimen/activity_margin"
         android:paddingRight="@dimen/activity_margin"
         android:textColor="@color/colorPrimary"
-        android:textSize="26dp" />
+        android:textSize="@dimen/_18ssp" />
 
     <ProgressBar
         android:id="@+id/progressBar"

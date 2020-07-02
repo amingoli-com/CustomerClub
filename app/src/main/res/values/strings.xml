@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">گالری مشکات - باشگاه مشتریان</string>
+    <string name="app_name">باشگاه مشتریان گالری مشکات</string>
 
     <string name="title_activity_ticket">Book Ticket</string>
-    <string name="lbl_duration">DURATION</string>
-    <string name="lbl_genre">GENRE</string>
-    <string name="lbl_rating">RATING</string>
-    <string name="lbl_price">PRICE</string>
-    <string name="btn_buy_now">BUY NOW</string>
-    <string name="btn_coming_soon">COMING SOON</string>
+    <string name="lbl_duration">توضیحات</string>
+    <string name="lbl_genre">آخرین تاریخ خرید</string>
+    <string name="lbl_rating">تعداد خریدها تاکنون</string>
+    <string name="lbl_price">کل مبلغ خرید</string>
+    <string name="btn_buy_now">ثبت خرید جدید</string>
+    <string name="btn_coming_soon">بزودی</string>
     <string name="msg_no_ticket_found">No ticket found. Try scanning the QR Codes from http://api.androidhive.info/QR Codes/</string>
-    <string name="scan_qr_code">Scan QR Code</string>
-    <string name="main_activity_bottom_logo">Scan the QR code on the poster and book your movie tickets</string>
+    <string name="scan_qr_code">بارکدی را اسکن کنید</string>
+    <string name="main_activity_bottom_logo">با اسکن کردن کارت ها به اطلاعات خرید مشتریان خود دسترسی پیدا کنید</string>
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="tel">شماره تلفن</string>
     <string name="desc">توضیحات</string>
