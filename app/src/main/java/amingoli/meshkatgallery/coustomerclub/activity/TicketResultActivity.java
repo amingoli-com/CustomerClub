@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import com.google.zxing.WriterException;
 
 import java.util.Calendar;
@@ -41,6 +44,9 @@ import amingoli.meshkatgallery.coustomerclub.util.database.Database;
 import amingoli.meshkatgallery.coustomerclub.util.database.Query;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import ir.hamsaa.persiandatepicker.Listener;
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.util.PersianCalendar;
 
 public class TicketResultActivity extends AppCompatActivity {
     private static final String TAG = "amingoli78-"+TicketResultActivity.class.getSimpleName();
@@ -113,21 +119,69 @@ public class TicketResultActivity extends AppCompatActivity {
         return cal;
     }
 
-    private void addOrder(){
+    private void addOrder(final String date){
         View view = View.inflate(this, R.layout.content_dialog_add_order, null);
         final EditText orderPrice = view.findViewById(R.id.order_price);
+        final TextView date_picker = view.findViewById(R.id.date_picker);
+        date_picker.setText(Tools.getFormattedDateSimple(Long.valueOf(date)));
         orderPrice.addTextChangedListener(new NumberTextWatcher(orderPrice));
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات خرید را وارد کنید");
         builder.setMessage("")
                 .setView(view)
                 .setCancelable(false)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Query.insert_order(writeDatabase,String.valueOf(getDay().getTimeInMillis()),getTextEditText(orderPrice),barcode);
-                        searchBarcode();
+                        if (getTextEditText(orderPrice).length()>=1 || !getTextEditText(orderPrice).startsWith("0")){
+                            Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode);
+                            searchBarcode();
+                        }else {
+                            Toast.makeText(TicketResultActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("لغو", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
                     }
                 }).show();
+    }
+    private void datePicker(){
+        Typeface iranyekan_regular = ResourcesCompat.getFont(this, R.font.iranyekan_regular);
+        PersianDatePickerDialog picker = new PersianDatePickerDialog(this)
+                .setPositiveButtonString("باشه")
+                .setNegativeButton("لغو")
+                .setTodayButton("امروز")
+                .setTodayButtonVisible(true)
+                .setMinYear(1300)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setInitDate(new PersianCalendar())
+                .setActionTextColor(Color.GRAY)
+                .setTypeFace(iranyekan_regular)
+                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                .setShowInBottomSheet(true)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(PersianCalendar persianCalendar) {
+                        addOrder(String.valueOf(persianCalendar.getTimeInMillis()));
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getGregorianChange());//Fri Oct 15 03:25:44 GMT+04:30 1582
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getTimeInMillis());//1583253636577
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getTime());//Tue Mar 03 20:10:36 GMT+03:30 2020
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getDelimiter());//  /
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getPersianLongDate());// سه‌شنبه  13  اسفند  1398
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getPersianLongDateAndTime()); //سه‌شنبه  13  اسفند  1398 ساعت 20:10:36
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.getPersianMonthName()); //اسفند
+                        Log.d(TAG, "onDateSelected: "+persianCalendar.isPersianLeapYear());//false
+                    }
+
+                    @Override
+                    public void onDismissed() {
+
+                    }
+                });
+
+        picker.show();
     }
 
 
@@ -199,7 +253,7 @@ public class TicketResultActivity extends AppCompatActivity {
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addOrder();
+                datePicker();
             }
         });
     }
