@@ -31,7 +31,7 @@
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingTop="@dimen/dimen_10"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/name"
@@ -100,7 +100,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:maxLength="50"
                     android:textColor="@color/lbl_value"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,7 +126,7 @@
                     android:textAllCaps="true"
                     android:textAlignment="center"
                     android:textColor="@color/lbl_value"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
         </LinearLayout>

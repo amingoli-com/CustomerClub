@@ -24,16 +24,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
 import com.google.zxing.WriterException;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.FaNum;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
 import amingoli.meshkatgallery.coustomerclub.util.Tools;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
@@ -85,12 +85,7 @@ public class TicketResultActivity extends AppCompatActivity {
         if (readDatabase !=null) readDatabase.close();
     }
 
-
-
-
-
     private void addQrCode(){
-        final Date date = new Date();
         View view = View.inflate(this, R.layout.content_dialog_add_qrcode, null);
         final EditText name = view.findViewById(R.id.name);
         final EditText tel = view.findViewById(R.id.tel);
@@ -102,12 +97,17 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Query.insert_qrCode(writeDatabase,barcode,String.valueOf(date.getTime()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                        Query.insert_qrCode(writeDatabase,barcode,String.valueOf(getDay().getTimeInMillis()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                        searchBarcode();
                     }
                 }).show();
     }
 
-
+    private Calendar getDay() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 0);
+        return cal;
+    }
 
     /**
      * Searches the barcode by making http call
@@ -136,7 +136,7 @@ public class TicketResultActivity extends AppCompatActivity {
         if (cursor.getCount()>=1){
             cursor.moveToFirst();
             String qrcode = cursor.getString( cursor.getColumnIndex("qrcode") );
-            int crated_at = cursor.getInt( cursor.getColumnIndex("crated_at") );
+            String crated_at = cursor.getString( cursor.getColumnIndex("crated_at") );
             String name = cursor.getString( cursor.getColumnIndex("name") );
             String tel = cursor.getString( cursor.getColumnIndex("tel") );
             String desc = cursor.getString(cursor.getColumnIndex("desc") );
@@ -158,11 +158,11 @@ public class TicketResultActivity extends AppCompatActivity {
     private void renderMovie(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
         setImage(barcode);
         txtName.setText(name);
-        txtDirector.setText(tel);
-        txtDuration.setText(desc);
+        txtDirector.setText(FaNum.convert(tel));
+        txtDuration.setText(FaNum.convert(desc));
         txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(date)));
-        txtRating.setText(totalRecord);
-        txtPrice.setText(totalPrice);
+        txtRating.setText(FaNum.convert(totalRecord));
+        txtPrice.setText(FaNum.convert(totalPrice));
         btnBuy.setText(getString(R.string.btn_buy_now));
         btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
@@ -188,7 +188,7 @@ public class TicketResultActivity extends AppCompatActivity {
             int width = point.x;
             int height = point.y;
             int smallerDimension = Math.min(width, height);
-//                    smallerDimension = smallerDimension / 3;
+                    smallerDimension = smallerDimension *2;
 
             QRGEncoder qrgEncoder = new QRGEncoder(
                     barcode, null,
