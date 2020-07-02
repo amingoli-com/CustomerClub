@@ -19,5 +19,7 @@
     <string name="order_price">مبلغ خرید</string>
     <string name="order_date">تاریخ خرید</string>
     <string name="msg_copied_clipboard">کپی شد</string>
+    <string name="edite">ویرایش</string>
+    <string name="order_list">تاریخچه خریدها</string>
 
 </resources>

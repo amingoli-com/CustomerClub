@@ -34,7 +34,6 @@ import com.google.zxing.WriterException;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Objects;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.FaNum;
@@ -54,9 +53,10 @@ public class TicketResultActivity extends AppCompatActivity {
 
     private SQLiteDatabase writeDatabase, readDatabase;
     private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=dunkirk";
-    private TextView crated_at,txtName, txtDuration,qr_code, txtDirector, txtGenre, txtRating, txtPrice, txtError;
+    private View box;
+    private TextView crated_at,txtName, txtDesc,qr_code, txtTel, txtLastDateOrder, txtTotalOrder, txtPrice, txtError,edit,order_list;
     private ImageView imgPoster;
-    private Button btnBuy;
+    private Button txtAddOrder;
     private ProgressBar progressBar;
     private TicketView ticketView;
     private String barcode = null;
@@ -82,7 +82,7 @@ public class TicketResultActivity extends AppCompatActivity {
         if (barcodeWasSaved()){
             searchBarcode();
         }else {
-            addQrCode();
+            addQrCode(true);
         }
     }
 
@@ -97,7 +97,7 @@ public class TicketResultActivity extends AppCompatActivity {
     /**
     * Alert Dialog
     * */
-    private void addQrCode(){
+    private void addQrCode(final boolean isNew){
         View view = View.inflate(this, R.layout.content_dialog_add_qrcode, null);
         final EditText name = view.findViewById(R.id.name);
         final EditText tel = view.findViewById(R.id.tel);
@@ -109,10 +109,26 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Query.insert_qrCode(writeDatabase,barcode,String.valueOf(getDay().getTimeInMillis()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                        if (isNew){
+                            Query.insert_qrCode(writeDatabase,barcode,String.valueOf(getDay().getTimeInMillis()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                        }else {
+                            Query.update_qrCode(writeDatabase,barcode,getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                        }
                         searchBarcode();
                     }
-                }).show();
+                });
+        if (!isNew){
+            name.setText(txtName.getText());
+            tel.setText(txtTel.getText());
+            desc.setText(txtDesc.getText());
+            builder.setNegativeButton("لغو", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }
+        builder.show();
     }
     private Calendar getDay() {
         final Calendar cal = Calendar.getInstance();
@@ -176,7 +192,6 @@ public class TicketResultActivity extends AppCompatActivity {
                         Log.d(TAG, "onDateSelected: "+persianCalendar.getPersianMonthName()); //اسفند
                         Log.d(TAG, "onDateSelected: "+persianCalendar.isPersianLeapYear());//false
                     }
-
                     @Override
                     public void onDismissed() {
 
@@ -216,20 +231,16 @@ public class TicketResultActivity extends AppCompatActivity {
         qr_code.setText(barcode);
         crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
         txtName.setText(name);
-        txtDirector.setText(FaNum.convert(tel));
-        txtDuration.setText(FaNum.convert(desc));
+        txtTel.setText(FaNum.convert(tel));
+        txtDesc.setText(FaNum.convert(desc));
         if (renderLastOrder()!=null && renderLastOrder().length()>1)
-            txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
-        txtRating.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
-        DecimalFormat form = new DecimalFormat("0.00");
+            txtLastDateOrder.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
+        txtTotalOrder.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
         txtPrice.setText(FaNum.convert(renderTotalPrice()));
-        btnBuy.setText(getString(R.string.btn_buy_now));
-        btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        txtAddOrder.setText(getString(R.string.btn_buy_now));
+        txtAddOrder.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
-        ticketView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-
-        txtDirector.setOnClickListener(new View.OnClickListener() {
+        txtTel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -237,12 +248,28 @@ public class TicketResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btnBuy.setOnClickListener(new View.OnClickListener() {
+        txtAddOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 datePicker();
             }
         });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addQrCode(false);
+            }
+        });
+        order_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ticketView.setVisibility(View.VISIBLE);
+        box.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void renderImageCode(String barcode){
@@ -311,6 +338,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private void showNoTicket() {
         txtError.setVisibility(View.VISIBLE);
         ticketView.setVisibility(View.GONE);
+        box.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -349,18 +377,21 @@ public class TicketResultActivity extends AppCompatActivity {
     private void FINDID(){
         crated_at = findViewById(R.id.crated_at);
         txtName = findViewById(R.id.name);
-        txtDirector = findViewById(R.id.director);
-        txtDuration = findViewById(R.id.duration);
+        txtTel = findViewById(R.id.director);
+        txtDesc = findViewById(R.id.duration);
         txtPrice = findViewById(R.id.price);
-        txtRating = findViewById(R.id.rating);
+        txtTotalOrder = findViewById(R.id.rating);
         imgPoster = findViewById(R.id.poster);
         qr_code = findViewById(R.id.qr_code);
-        txtGenre = findViewById(R.id.genre);
-        btnBuy = findViewById(R.id.btn_buy);
+        txtLastDateOrder = findViewById(R.id.genre);
+        txtAddOrder = findViewById(R.id.btn_buy);
         imgPoster = findViewById(R.id.poster);
         txtError = findViewById(R.id.txt_error);
         ticketView = findViewById(R.id.layout_ticket);
         progressBar = findViewById(R.id.progressBar);
+        box = findViewById(R.id.box);
+        edit = findViewById(R.id.edit);
+        order_list = findViewById(R.id.order_list);
 
     }
 }

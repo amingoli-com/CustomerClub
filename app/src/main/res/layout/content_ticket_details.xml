@@ -31,7 +31,7 @@
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingTop="@dimen/dimen_10"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/name"
@@ -205,20 +205,57 @@
 
     </amingoli.meshkatgallery.coustomerclub.util.TicketView>
 
-    <TextView
-        android:id="@+id/crated_at"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_buy"
-        android:layout_gravity="bottom"
-        android:fontFamily="sans-serif-condensed"
-        android:textAlignment="center"
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/box"
         android:layout_marginBottom="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_25sdp"
-        android:layout_marginLeft="@dimen/_25sdp"
-        android:textAllCaps="true"
-        android:textSize="@dimen/_9ssp"
-        tools:ignore="RtlCompat" />
+        android:layout_above="@+id/btn_buy"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/edit"
+                android:text="@string/edite"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/_9ssp" />
+            <TextView
+                android:id="@+id/order_list"
+                android:text="@string/order_list"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="@dimen/_9ssp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/crated_at"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:fontFamily="sans-serif-condensed"
+            android:textAlignment="center"
+            android:layout_marginRight="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_25sdp"
+            android:textAllCaps="true"
+            android:textSize="@dimen/_9ssp"
+            tools:ignore="RtlCompat" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btn_buy"

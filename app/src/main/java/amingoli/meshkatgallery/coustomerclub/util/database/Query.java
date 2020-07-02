@@ -24,6 +24,21 @@ public class Query {
         write(database,query);
     }
 
+    public static void update_qrCode(SQLiteDatabase database,String qrCode, String name, String tel, String desc){
+        String query = "UPDATE "+table_qrCodeList +
+                " SET name = '"+name+"' , tel = '"+tel+"' , desc = '"+desc+"' " +
+                " WHERE qrcode = '"+qrCode+"' ;";
+        Log.d(TAG, "update_qrCode: "+query);
+        write(database,query);
+    }
+
+    public static void update_order(SQLiteDatabase database,String date,String totalPrice,String qrCode){
+        String query = "INSERT INTO " + table_orderList
+                + " (date,total_price,qrcode) "
+                + " Values ('"+date+"','"+totalPrice+"','"+qrCode+"') ";
+        write(database,query);
+    }
+
     public static String select_qrCode(String qrCode){
         return "select * from "+table_qrCodeList+" where qrcode = '"+qrCode+"' limit 1";
     }
