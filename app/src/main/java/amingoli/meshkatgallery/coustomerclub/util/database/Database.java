@@ -22,7 +22,8 @@ public class Database extends SQLiteAssetHelper {
                 " WHERE "+del_id + " = '"+id+"' "+
                 " AND "+del_liked + " = 'true' limit 1";
     }
-
+//    select * from order_list where qrcode='A'
+//    INSERT INTO order_list  (date,total_price,qrcode) values ('2017','88000','ABC')
 
 
 

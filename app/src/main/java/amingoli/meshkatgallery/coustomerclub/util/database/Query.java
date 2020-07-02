@@ -1,18 +1,35 @@
 package amingoli.meshkatgallery.coustomerclub.util.database;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import static amingoli.meshkatgallery.coustomerclub.util.database.Database.table_orderList;
 import static amingoli.meshkatgallery.coustomerclub.util.database.Database.table_qrCodeList;
 
 public class Query {
-    public static String inset_qrCodeList(String qrCode,String cratedAt,String name,String tel,String desc){
-        return "INSERT INTO " + table_qrCodeList
+
+    public static void insert_qrCode(SQLiteDatabase database,String qrCode, String cratedAt, String name, String tel, String desc){
+        String query = "INSERT INTO " + table_qrCodeList
                 + " (qrcode,crated_at,name,tel,desc) "
-                + " Values ("+qrCode+","+cratedAt+","+name+","+tel+","+desc+") ";
+                + " Values ('"+qrCode+"','"+cratedAt+"','"+name+"','"+tel+"','"+desc+"') ";
+        write(database,query);
     }
 
-    public static String inset_orderList(String date,String totalPrice,String qrCode){
-        return "INSERT INTO " + table_orderList
+    public static void insert_order(SQLiteDatabase database,String date,String totalPrice,String qrCode){
+        String query = "INSERT INTO " + table_orderList
                 + " (date,total_price,qrcode) "
-                + " Values ("+date+","+totalPrice+","+qrCode+") ";
+                + " Values ('"+date+"','"+totalPrice+"','"+qrCode+"') ";
+        write(database,query);
+    }
+
+    public static String select_qrCode(String qrCode){
+        return "select * from "+table_qrCodeList+" where qrcode = '"+qrCode+"' limit 1";
+    }
+
+    public static void write (SQLiteDatabase database,String Query){
+        database.execSQL(Query);
+    }
+    public static Cursor cursor(SQLiteDatabase database,String query){
+        return database.rawQuery(query,null);
     }
 }

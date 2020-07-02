@@ -1,6 +1,8 @@
 package amingoli.meshkatgallery.coustomerclub.activity;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -9,7 +11,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,7 +27,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
@@ -37,43 +37,32 @@ import org.json.JSONObject;
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.MyApplication;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
+import amingoli.meshkatgallery.coustomerclub.util.database.Database;
+import amingoli.meshkatgallery.coustomerclub.util.database.Query;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class TicketResultActivity extends AppCompatActivity {
-    private static final String TAG = TicketResultActivity.class.getSimpleName();
+    private static final String TAG = "amingoli78-"+TicketResultActivity.class.getSimpleName();
 
-    // url to search barcode
+    private SQLiteDatabase writeDatabase, readDatabase;
     private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=dunkirk";
-
     private TextView txtName, txtDuration, txtDirector, txtGenre, txtRating, txtPrice, txtError;
     private ImageView imgPoster;
     private Button btnBuy;
     private ProgressBar progressBar;
     private TicketView ticketView;
-    String barcode = null;
+    private String barcode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        transparentToolbar();
-        setContentView(R.layout.activity_ticket_result);
-
-        txtName = findViewById(R.id.name);
-        txtDirector = findViewById(R.id.director);
-        txtDuration = findViewById(R.id.duration);
-        txtPrice = findViewById(R.id.price);
-        txtRating = findViewById(R.id.rating);
-        imgPoster = findViewById(R.id.poster);
-        txtGenre = findViewById(R.id.genre);
-        btnBuy = findViewById(R.id.btn_buy);
-        imgPoster = findViewById(R.id.poster);
-        txtError = findViewById(R.id.txt_error);
-        ticketView = findViewById(R.id.layout_ticket);
-        progressBar = findViewById(R.id.progressBar);
+        TRANSPARENTTOOLBAR(); // remove toolbar
+        setContentView(R.layout.activity_ticket_result); // set layout
+        DATABASE();
+        FINDID();
 
         barcode = getIntent().getStringExtra("code");
-
         // close the activity in case of empty barcode
         if (TextUtils.isEmpty(barcode)) {
             Toast.makeText(getApplicationContext(), "Barcode is empty!", Toast.LENGTH_LONG).show();
@@ -82,8 +71,37 @@ public class TicketResultActivity extends AppCompatActivity {
 
         // search the barcode
         searchBarcode(barcode);
-        Toast.makeText(this, barcode, Toast.LENGTH_SHORT).show();
+
+        if (barcodeWasSaved()){
+            Toast.makeText(this, "OK "+barcode, Toast.LENGTH_SHORT).show();
+        }else {
+            Query.insert_qrCode(writeDatabase,barcode,"2020-04-01","محمد امین","09195191378","عشقه");
+        }
+
+
+
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (writeDatabase !=null) writeDatabase.close();
+        if (readDatabase !=null) readDatabase.close();
+    }
+
+
+
+    private boolean barcodeWasSaved(){
+        Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
+        return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
+    }
+
+    private Cursor inser(){
+         return writeDatabase.rawQuery(Query.select_qrCode(barcode),null);
+    }
+
+
+
 
     /**
      * Searches the barcode by making http call
@@ -175,6 +193,15 @@ public class TicketResultActivity extends AppCompatActivity {
                 }
                 ticketView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
+
+
+                btnBuy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
             } else {
                 // movie not found
                 showNoTicket();
@@ -188,14 +215,6 @@ public class TicketResultActivity extends AppCompatActivity {
             showNoTicket();
             Toast.makeText(getApplicationContext(), "Error occurred. Check your LogCat for full report", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private class Movie {
@@ -241,9 +260,11 @@ public class TicketResultActivity extends AppCompatActivity {
         public boolean isReleased() {
             return isReleased;
         }
+
     }
 
-    private void transparentToolbar() {
+    //  making toolbar transparent
+    private void TRANSPARENTTOOLBAR() {
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
         }
@@ -264,5 +285,26 @@ public class TicketResultActivity extends AppCompatActivity {
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
+    }
+
+    private void DATABASE(){
+        writeDatabase = new Database(this).getWritableDatabase();
+        readDatabase = new Database(this).getReadableDatabase();
+    }
+
+    private void FINDID(){
+        txtName = findViewById(R.id.name);
+        txtDirector = findViewById(R.id.director);
+        txtDuration = findViewById(R.id.duration);
+        txtPrice = findViewById(R.id.price);
+        txtRating = findViewById(R.id.rating);
+        imgPoster = findViewById(R.id.poster);
+        txtGenre = findViewById(R.id.genre);
+        btnBuy = findViewById(R.id.btn_buy);
+        imgPoster = findViewById(R.id.poster);
+        txtError = findViewById(R.id.txt_error);
+        ticketView = findViewById(R.id.layout_ticket);
+        progressBar = findViewById(R.id.progressBar);
+
     }
 }
