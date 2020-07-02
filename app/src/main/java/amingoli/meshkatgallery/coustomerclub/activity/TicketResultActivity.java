@@ -34,6 +34,7 @@ import java.util.Date;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.FaNum;
+import amingoli.meshkatgallery.coustomerclub.util.NumberTextWatcher;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
 import amingoli.meshkatgallery.coustomerclub.util.Tools;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
@@ -115,6 +116,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private void addOrder(){
         View view = View.inflate(this, R.layout.content_dialog_add_order, null);
         final EditText orderPrice = view.findViewById(R.id.order_price);
+        orderPrice.addTextChangedListener(new NumberTextWatcher(orderPrice));
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات خرید را وارد کنید");
         builder.setMessage("")

@@ -18,5 +18,6 @@
     <string name="format_price">تومان</string>
     <string name="order_price">مبلغ خرید</string>
     <string name="order_date">تاریخ خرید</string>
+    <string name="msg_copied_clipboard">کپی شد</string>
 
 </resources>
