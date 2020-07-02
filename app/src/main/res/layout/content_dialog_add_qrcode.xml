@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/desc"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:inputType="text"
+            android:inputType="textLongMessage"
             android:maxLines="7"
             android:maxLength="300" />
     </com.google.android.material.textfield.TextInputLayout>

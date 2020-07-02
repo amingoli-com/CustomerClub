@@ -139,6 +139,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private void addOrder(final String date){
         View view = View.inflate(this, R.layout.content_dialog_add_order, null);
         final EditText orderPrice = view.findViewById(R.id.order_price);
+        final EditText order_desc = view.findViewById(R.id.order_desc);
         final TextView date_picker = view.findViewById(R.id.date_picker);
         date_picker.setText(Tools.getFormattedDateSimple(Long.valueOf(date)));
         orderPrice.addTextChangedListener(new NumberTextWatcher(orderPrice));
@@ -150,7 +151,7 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=2 && !getTextEditText(orderPrice).startsWith("0")){
-                            Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode);
+                            Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode,getTextEditText(order_desc));
                             Toast.makeText(TicketResultActivity.this, getTextEditText(orderPrice), Toast.LENGTH_SHORT).show();
                             searchBarcode();
                         }else {

@@ -51,5 +51,20 @@
 
     </LinearLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/order_desc"
+            android:padding="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/desc"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:inputType="textLongMessage"
+            android:maxLength="500"
+            android:maxLines="5"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 </LinearLayout>
