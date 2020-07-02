@@ -32,6 +32,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.google.zxing.WriterException;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -220,7 +221,8 @@ public class TicketResultActivity extends AppCompatActivity {
         if (renderLastOrder()!=null && renderLastOrder().length()>1)
             txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
         txtRating.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
-        txtPrice.setText(FaNum.convert(String.valueOf(renderTotalPrice())));
+        DecimalFormat form = new DecimalFormat("0.00");
+        txtPrice.setText(FaNum.convert(renderTotalPrice()));
         btnBuy.setText(getString(R.string.btn_buy_now));
         btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
@@ -265,7 +267,7 @@ public class TicketResultActivity extends AppCompatActivity {
         }
     }
 
-    private int renderTotalPrice(){
+    private String renderTotalPrice(){
         int total_price = 0;
         Cursor cursor = Query.cursor(readDatabase,Query.select_order(barcode));
         if (cursor.getCount()>=1){
@@ -273,7 +275,10 @@ public class TicketResultActivity extends AppCompatActivity {
                 total_price = total_price + cursor.getInt( cursor.getColumnIndex("total_price") );
             }
         }
-        return total_price;
+        Double number = (double) total_price;
+        DecimalFormat dec = new DecimalFormat("###,###,### تومان");
+        dec.setMinimumFractionDigits(0);
+        return dec.format(number);
     }
 
     private int renderTotalOrder(){
