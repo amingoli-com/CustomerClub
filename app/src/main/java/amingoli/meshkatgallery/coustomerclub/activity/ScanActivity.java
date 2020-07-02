@@ -3,11 +3,13 @@ package amingoli.meshkatgallery.coustomerclub.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.zxing.Result;
 
+import amingoli.meshkatgallery.coustomerclub.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -39,6 +41,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         // Do something with the result here
         Log.v(TAG, rawResult.getText()); // Prints scan results
         Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.beep);
+        mp.start();
         Intent intent = new Intent(ScanActivity.this, TicketResultActivity.class);
         intent.putExtra("code", rawResult.getText()+"");
         startActivity(intent);
