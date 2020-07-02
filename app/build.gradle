@@ -48,4 +48,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 //    sqlite manager
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+//    fa date
+    implementation 'com.github.samanzamani.persiandate:PersianDate:0.8'
 }

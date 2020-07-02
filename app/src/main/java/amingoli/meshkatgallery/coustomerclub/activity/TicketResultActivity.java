@@ -35,6 +35,7 @@ import java.util.Date;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
+import amingoli.meshkatgallery.coustomerclub.util.Tools;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
 import amingoli.meshkatgallery.coustomerclub.util.database.Query;
 import androidmads.library.qrgenearator.QRGContents;
@@ -159,7 +160,7 @@ public class TicketResultActivity extends AppCompatActivity {
         txtName.setText(name);
         txtDirector.setText(tel);
         txtDuration.setText(desc);
-        txtGenre.setText(date);
+        txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(date)));
         txtRating.setText(totalRecord);
         txtPrice.setText(totalPrice);
         btnBuy.setText(getString(R.string.btn_buy_now));
@@ -199,7 +200,7 @@ public class TicketResultActivity extends AppCompatActivity {
             Log.v(TAG, e.toString());
         }
     }
-    
+
 
     //  making toolbar transparent
     private void TRANSPARENTTOOLBAR() {
