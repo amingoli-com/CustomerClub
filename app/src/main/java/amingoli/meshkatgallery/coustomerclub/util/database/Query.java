@@ -27,6 +27,9 @@ public class Query {
     public static String select_qrCode(String qrCode){
         return "select * from "+table_qrCodeList+" where qrcode = '"+qrCode+"' limit 1";
     }
+    public static String select_order(String qrCode){
+        return "select * from "+table_orderList+" where qrcode = '"+qrCode+"'";
+    }
 
     public static void write (SQLiteDatabase database,String Query){
         database.execSQL(Query);

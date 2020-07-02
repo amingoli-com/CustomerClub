@@ -33,7 +33,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.google.zxing.WriterException;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Objects;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.FaNum;
@@ -186,24 +186,12 @@ public class TicketResultActivity extends AppCompatActivity {
     }
 
 
+
+
     /**
-     * Searches the barcode by making http call
-     * Request was made using Volley network library but the library is
-     * not suggested in production, consider using Retrofit
+     * DateBase
      */
-
-
-    private boolean barcodeWasSaved(){
-        Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
-        return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
-    }
-
-    private String getTextEditText(EditText editText){
-        return editText.getText().toString().trim().replace(",","");
-    }
-
     private void searchBarcode() {
-        @SuppressLint("Recycle")
         Cursor cursor = Query.cursor(readDatabase,Query.select_qrCode(barcode));
         if (cursor.getCount()>=1){
             cursor.moveToFirst();
@@ -212,32 +200,27 @@ public class TicketResultActivity extends AppCompatActivity {
             String name = cursor.getString( cursor.getColumnIndex("name") );
             String tel = cursor.getString( cursor.getColumnIndex("tel") );
             String desc = cursor.getString(cursor.getColumnIndex("desc") );
-            renderMovie(qrcode,name,tel, String.valueOf(crated_at),desc,"۳۴۵,۰۰۰","۲۸ مرتبه");
+            renderTick(qrcode,name,tel, String.valueOf(crated_at),desc,"۳۴۵,۰۰۰","۲۸ مرتبه");
         }else {
             showNoTicket();
         }
-    }
-
-    private void showNoTicket() {
-        txtError.setVisibility(View.VISIBLE);
-        ticketView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
     }
 
     /**
      * Rendering movie details on the ticket
      */
     @SuppressLint("SetTextI18n")
-    private void renderMovie(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
-        setImage(barcode);
+    private void renderTick(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
+        renderImageCode(barcode);
         qr_code.setText(barcode);
         crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
         txtName.setText(name);
         txtDirector.setText(FaNum.convert(tel));
         txtDuration.setText(FaNum.convert(desc));
-        txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(date)));
-        txtRating.setText(FaNum.convert(totalRecord));
-        txtPrice.setText(FaNum.convert(totalPrice));
+        if (renderLastOrder()!=null && renderLastOrder().length()>1)
+            txtGenre.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
+        txtRating.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
+        txtPrice.setText(FaNum.convert(String.valueOf(renderTotalPrice())));
         btnBuy.setText(getString(R.string.btn_buy_now));
         btnBuy.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
@@ -260,7 +243,7 @@ public class TicketResultActivity extends AppCompatActivity {
         });
     }
 
-    private void setImage(String barcode){
+    private void renderImageCode(String barcode){
         try {
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
             Display display = manager != null ? manager.getDefaultDisplay() : null;
@@ -282,27 +265,73 @@ public class TicketResultActivity extends AppCompatActivity {
         }
     }
 
+    private int renderTotalPrice(){
+        int total_price = 0;
+        Cursor cursor = Query.cursor(readDatabase,Query.select_order(barcode));
+        if (cursor.getCount()>=1){
+            while (cursor.moveToNext()){
+                total_price = total_price + cursor.getInt( cursor.getColumnIndex("total_price") );
+            }
+        }
+        return total_price;
+    }
 
+    private int renderTotalOrder(){
+        return Query.cursor(readDatabase,Query.select_order(barcode)).getCount();
+    }
+
+    private String renderLastOrder(){
+        Cursor cursor = Query.cursor(readDatabase,Query.select_order(barcode));
+        if (cursor.getCount()>=1){
+            cursor.moveToLast();
+            return cursor.getString( cursor.getColumnIndex("date") );
+        }
+        return null;
+    }
+
+
+    /**
+     * Util
+     * */
+
+    private boolean barcodeWasSaved(){
+        Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
+        return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
+    }
+
+    private String getTextEditText(EditText editText){
+        return editText.getText().toString().trim().replace(",","");
+    }
+
+    private void showNoTicket() {
+        txtError.setVisibility(View.VISIBLE);
+        ticketView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * Tools
+     * */
     //  making toolbar transparent
     private void TRANSPARENTTOOLBAR() {
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+            SETWIMDOWFLAG(this, true);
         }
         if (Build.VERSION.SDK_INT >= 19) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            SETWIMDOWFLAG(this, false);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
-    private void setWindowFlag(Activity activity, final int bits, boolean on) {
+    private void SETWIMDOWFLAG(Activity activity, boolean on) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
         if (on) {
-            winParams.flags |= bits;
+            winParams.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         } else {
-            winParams.flags &= ~bits;
+            winParams.flags &= ~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         }
         win.setAttributes(winParams);
     }
