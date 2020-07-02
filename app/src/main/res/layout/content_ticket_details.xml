@@ -61,10 +61,10 @@
         <ImageView
             android:id="@+id/poster"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/img_poster_height"
+            android:layout_height="@dimen/_140sdp"
             android:layout_marginBottom="@dimen/activity_margin"
             android:layout_marginTop="@dimen/activity_margin"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerInside" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -36,6 +36,8 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 //    barcode scanner
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+//    qr code generator
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
     implementation 'com.google.android.gms:play-services-vision:20.1.0'
     // vision barcode scanner
     implementation 'info.androidhive:barcode-reader:1.1.5'

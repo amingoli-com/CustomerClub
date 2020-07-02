@@ -1,11 +1,14 @@
 package amingoli.meshkatgallery.coustomerclub.activity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -27,12 +30,15 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
+import com.google.zxing.WriterException;
 
 import org.json.JSONObject;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.MyApplication;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class TicketResultActivity extends AppCompatActivity {
     private static final String TAG = TicketResultActivity.class.getSimpleName();
@@ -45,6 +51,7 @@ public class TicketResultActivity extends AppCompatActivity {
     private Button btnBuy;
     private ProgressBar progressBar;
     private TicketView ticketView;
+    String barcode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,7 @@ public class TicketResultActivity extends AppCompatActivity {
         ticketView = findViewById(R.id.layout_ticket);
         progressBar = findViewById(R.id.progressBar);
 
-        String barcode = getIntent().getStringExtra("code");
+        barcode = getIntent().getStringExtra("code");
 
         // close the activity in case of empty barcode
         if (TextUtils.isEmpty(barcode)) {
@@ -130,13 +137,34 @@ public class TicketResultActivity extends AppCompatActivity {
             Movie movie = new Gson().fromJson(response.toString(), Movie.class);
 
             if (movie != null) {
+                try {
+                    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                    Display display = manager != null ? manager.getDefaultDisplay() : null;
+                    Point point = new Point();
+                    if (display != null) display.getSize(point);
+                    int width = point.x;
+                    int height = point.y;
+                    int smallerDimension = Math.min(width, height);
+//                    smallerDimension = smallerDimension / 3;
+
+                    QRGEncoder qrgEncoder = new QRGEncoder(
+                            barcode, null,
+                            QRGContents.Type.TEXT,
+                            smallerDimension);
+                    Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+                    imgPoster.setImageBitmap(bitmap);
+                } catch (WriterException e) {
+                    Log.v(TAG, e.toString());
+                }
+
+
                 txtName.setText(movie.getName());
                 txtDirector.setText(movie.getDirector());
                 txtDuration.setText(movie.getDuration());
                 txtGenre.setText(movie.getGenre());
                 txtRating.setText("" + movie.getRating());
                 txtPrice.setText(movie.getPrice());
-                Glide.with(this).load(movie.getPoster()).into(imgPoster);
+//                Glide.with(this).load(movie.getPoster()).into(imgPoster);
 
                 if (movie.isReleased()) {
                     btnBuy.setText(getString(R.string.btn_buy_now));
