@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
+    android:padding="@dimen/_7sdp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/order_date"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:inputType="text"
+            android:maxLines="2"
+            android:maxLength="50"
+            tools:ignore="TextFields" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/order_price"
+                android:padding="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/order_price"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:inputType="number"
+                android:maxLength="25"
+                android:maxLines="1"
+                android:digits="0123456789"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:text="@string/format_price"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="#333"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -46,7 +46,7 @@ public class TicketResultActivity extends AppCompatActivity {
 
     private SQLiteDatabase writeDatabase, readDatabase;
     private static final String URL = "https://api.androidhive.info/barcodes/search.php?code=dunkirk";
-    private TextView txtName, txtDuration, txtDirector, txtGenre, txtRating, txtPrice, txtError;
+    private TextView crated_at,txtName, txtDuration, txtDirector, txtGenre, txtRating, txtPrice, txtError;
     private ImageView imgPoster;
     private Button btnBuy;
     private ProgressBar progressBar;
@@ -85,6 +85,10 @@ public class TicketResultActivity extends AppCompatActivity {
         if (readDatabase !=null) readDatabase.close();
     }
 
+
+    /**
+    * Alert Dialog
+    * */
     private void addQrCode(){
         View view = View.inflate(this, R.layout.content_dialog_add_qrcode, null);
         final EditText name = view.findViewById(R.id.name);
@@ -102,12 +106,28 @@ public class TicketResultActivity extends AppCompatActivity {
                     }
                 }).show();
     }
-
     private Calendar getDay() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 0);
         return cal;
     }
+
+    private void addOrder(){
+        View view = View.inflate(this, R.layout.content_dialog_add_order, null);
+        final EditText orderPrice = view.findViewById(R.id.order_price);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("اطلاعات خرید را وارد کنید");
+        builder.setMessage("")
+                .setView(view)
+                .setCancelable(false)
+                .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Query.insert_order(writeDatabase,String.valueOf(getDay().getTimeInMillis()),getTextEditText(orderPrice),barcode);
+                        searchBarcode();
+                    }
+                }).show();
+    }
+
 
     /**
      * Searches the barcode by making http call
@@ -120,11 +140,6 @@ public class TicketResultActivity extends AppCompatActivity {
         Log.d(TAG, "barcodeWasSaved: "+Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount());
         return Query.cursor(readDatabase,Query.select_qrCode(barcode)).getCount()>0;
     }
-
-    private Cursor inser(){
-        return writeDatabase.rawQuery(Query.select_qrCode(barcode),null);
-    }
-
 
     private String getTextEditText(EditText editText){
         return editText.getText().toString().trim();
@@ -155,8 +170,10 @@ public class TicketResultActivity extends AppCompatActivity {
     /**
      * Rendering movie details on the ticket
      */
+    @SuppressLint("SetTextI18n")
     private void renderMovie(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
         setImage(barcode);
+        crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
         txtName.setText(name);
         txtDirector.setText(FaNum.convert(tel));
         txtDuration.setText(FaNum.convert(desc));
@@ -177,6 +194,12 @@ public class TicketResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addOrder();
+            }
+        });
     }
 
     private void setImage(String barcode){
@@ -188,7 +211,6 @@ public class TicketResultActivity extends AppCompatActivity {
             int width = point.x;
             int height = point.y;
             int smallerDimension = Math.min(width, height);
-                    smallerDimension = smallerDimension *2;
 
             QRGEncoder qrgEncoder = new QRGEncoder(
                     barcode, null,
@@ -232,6 +254,7 @@ public class TicketResultActivity extends AppCompatActivity {
     }
 
     private void FINDID(){
+        crated_at = findViewById(R.id.crated_at);
         txtName = findViewById(R.id.name);
         txtDirector = findViewById(R.id.director);
         txtDuration = findViewById(R.id.duration);

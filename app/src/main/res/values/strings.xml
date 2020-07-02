@@ -14,5 +14,9 @@
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="tel">شماره تلفن</string>
     <string name="desc">توضیحات</string>
+    <string name="crated_at"> ساخته شده در تاریخ </string>
+    <string name="format_price">تومان</string>
+    <string name="order_price">مبلغ خرید</string>
+    <string name="order_date">تاریخ خرید</string>
 
 </resources>
