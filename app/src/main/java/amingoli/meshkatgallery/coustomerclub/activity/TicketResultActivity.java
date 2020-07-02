@@ -132,7 +132,7 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (getTextEditText(orderPrice).length()>=1 || !getTextEditText(orderPrice).startsWith("0")){
+                        if (getTextEditText(orderPrice).length()>=2 && !getTextEditText(orderPrice).startsWith("0")){
                             Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode);
                             Toast.makeText(TicketResultActivity.this, getTextEditText(orderPrice), Toast.LENGTH_SHORT).show();
                             searchBarcode();
@@ -200,7 +200,7 @@ public class TicketResultActivity extends AppCompatActivity {
             String name = cursor.getString( cursor.getColumnIndex("name") );
             String tel = cursor.getString( cursor.getColumnIndex("tel") );
             String desc = cursor.getString(cursor.getColumnIndex("desc") );
-            renderTick(qrcode,name,tel, String.valueOf(crated_at),desc,"۳۴۵,۰۰۰","۲۸ مرتبه");
+            renderTick(qrcode,name,tel, String.valueOf(crated_at),desc);
         }else {
             showNoTicket();
         }
@@ -210,7 +210,7 @@ public class TicketResultActivity extends AppCompatActivity {
      * Rendering movie details on the ticket
      */
     @SuppressLint("SetTextI18n")
-    private void renderTick(String barcode, String name, final String tel, String date, String desc, String totalPrice, String totalRecord) {
+    private void renderTick(String barcode, String name, final String tel, String date, String desc) {
         renderImageCode(barcode);
         qr_code.setText(barcode);
         crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
