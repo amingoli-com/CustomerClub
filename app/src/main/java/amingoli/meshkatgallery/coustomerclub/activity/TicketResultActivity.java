@@ -151,9 +151,8 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (getTextEditText(orderPrice).length()>=2 && !getTextEditText(orderPrice).startsWith("0")){
+                        if (getTextEditText(orderPrice).length()>=1 && !getTextEditText(orderPrice).startsWith("0")){
                             Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode,getTextEditText(order_desc));
-                            Toast.makeText(TicketResultActivity.this, getTextEditText(orderPrice), Toast.LENGTH_SHORT).show();
                             searchBarcode();
                         }else {
                             Toast.makeText(TicketResultActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
@@ -238,7 +237,7 @@ public class TicketResultActivity extends AppCompatActivity {
         if (renderLastOrder()!=null && renderLastOrder().length()>1)
             txtLastDateOrder.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
         txtTotalOrder.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
-        txtPrice.setText(FaNum.convert(renderTotalPrice()));
+        txtPrice.setText(renderTotalPrice());
         txtAddOrder.setText(getString(R.string.btn_buy_now));
         txtAddOrder.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
@@ -306,10 +305,7 @@ public class TicketResultActivity extends AppCompatActivity {
                 total_price = total_price + cursor.getInt( cursor.getColumnIndex("total_price") );
             }
         }
-        Double number = (double) total_price;
-        DecimalFormat dec = new DecimalFormat("###,###,### تومان");
-        dec.setMinimumFractionDigits(0);
-        return dec.format(number);
+        return Tools.getForamtPrice(total_price);
     }
 
     private int renderTotalOrder(){

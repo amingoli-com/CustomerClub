@@ -1,13 +1,23 @@
 package amingoli.meshkatgallery.coustomerclub.activity.ListOrder;
 
 public class ModelListOrder {
-    String no,price,date,desc;
+    private int id;
+    private String no,price,date,desc;
 
-    public ModelListOrder(String no, String price, String date, String desc) {
+    public ModelListOrder(int id, String no, String price, String date, String desc) {
+        this.id = id;
         this.no = no;
         this.price = price;
         this.date = date;
         this.desc = desc;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNo() {

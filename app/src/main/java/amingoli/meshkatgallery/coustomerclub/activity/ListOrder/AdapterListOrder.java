@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.Tools;
 
-public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.ViewHolder> implements View.OnClickListener {
-
+public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.ViewHolder> {
 
     private List<ModelListOrder> itemList;
     private listener listener;
@@ -36,35 +36,34 @@ public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.View
 
     @Override
     public void onBindViewHolder(@NonNull AdapterListOrder.ViewHolder holder, final int position) {
-        ModelListOrder item = itemList.get(position);
+        final ModelListOrder item = itemList.get(position);
         holder.no.setText(item.getNo());
-        holder.date.setText(item.getDate());
-        holder.price.setText(item.getPrice());
+        holder.date.setText(Tools.getFormattedDateSimple2(Long.valueOf(item.getDate())));
+        holder.price.setText(Tools.getForamtPrice(Integer.parseInt(item.getPrice())));
 
-        holder.desc.setOnClickListener(this);
-        holder.edit.setOnClickListener(this);
-        holder.delete.setOnClickListener(this);
+        holder.desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.result(item.getId(), "view_desc",item.getDate(),item.getPrice(),item.getDesc());
+            }
+        });
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.result(item.getId(), "edit",item.getDate(),item.getPrice(),item.getDesc());
+            }
+        });
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.result(item.getId(), "delete",item.getDate(),item.getPrice(),item.getDesc());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return itemList.size();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.desc:
-
-                break;
-            case R.id.edit:
-
-                break;
-
-            case R.id.delete:
-
-                break;
-        }
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -84,6 +83,6 @@ public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.View
     }
 
     public interface listener{
-        void result(int pos);
+        void result(int id,String MODEL,String date,String price,String desc);
     }
 }

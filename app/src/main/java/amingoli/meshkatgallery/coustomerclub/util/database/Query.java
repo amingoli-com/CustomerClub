@@ -32,10 +32,10 @@ public class Query {
         write(database,query);
     }
 
-    public static void update_order(SQLiteDatabase database,String qrCode,String date,String totalPrice,String desc){
+    public static void update_order(SQLiteDatabase database,String qrCode,int id,String totalPrice,String desc){
         String query = "UPDATE "+table_orderList +
-                " SET date = '"+date+"' , total_price = '"+totalPrice+"' , desc = '"+desc+"' " +
-                " WHERE qrcode = '"+qrCode+"' ;";
+                " SET total_price = '"+totalPrice+"' , desc = '"+desc+"' " +
+                " WHERE qrcode = '"+qrCode+"' and id= '"+id+"';";
         write(database,query);
     }
 
