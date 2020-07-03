@@ -351,7 +351,7 @@ public class TicketResultActivity extends AppCompatActivity {
     }
 
     private String getTextEditText(EditText editText){
-        return editText.getText().toString().trim().replace(",","");
+        return FaNum.convertToEN(editText.getText().toString().trim().replace(",",""))+"";
     }
 
     private void showNoTicket() {

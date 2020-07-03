@@ -24,6 +24,7 @@ import java.util.List;
 
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.activity.TicketResultActivity;
+import amingoli.meshkatgallery.coustomerclub.util.FaNum;
 import amingoli.meshkatgallery.coustomerclub.util.NumberTextWatcher;
 import amingoli.meshkatgallery.coustomerclub.util.Tools;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
@@ -192,6 +193,6 @@ public class ListOrderActivity extends AppCompatActivity {
         itemList();
     }
     private String getTextEditText(EditText editText){
-        return editText.getText().toString().trim().replace(",","");
+        return FaNum.convertToEN(editText.getText().toString().trim().replace(",",""))+"";
     }
 }
