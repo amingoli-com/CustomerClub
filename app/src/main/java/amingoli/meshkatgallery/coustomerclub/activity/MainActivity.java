@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.database.Query;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +40,30 @@ public class MainActivity extends AppCompatActivity {
                 if (permission()){
                     startScanActivity();
                 }
+            }
+        });
+    findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("درباره ما")
+                        .setMessage("طراحی شده به درخواست گالری بدلیجات مشکات توسط امین گلی");
+                builder.setCancelable(true)
+                        .setPositiveButton("تماس با من", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:09100530593"));
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("بستن", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
     }
