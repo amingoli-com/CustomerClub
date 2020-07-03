@@ -21,5 +21,9 @@
     <string name="msg_copied_clipboard">کپی شد</string>
     <string name="edite">ویرایش</string>
     <string name="order_list">تاریخچه خریدها</string>
+    <string name="desc_need_permission">برای اسکن بارکد و ارائه خدمات، اجازه دسترسی به دوربین نیاز داریم</string>
+    <string name="ok_permission">باشه</string>
+    <string name="exit_app">خروج از برنامه</string>
+
 
 </resources>
