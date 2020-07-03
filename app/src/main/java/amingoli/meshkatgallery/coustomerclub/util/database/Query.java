@@ -38,6 +38,11 @@ public class Query {
                 " WHERE qrcode = '"+qrCode+"' and id= '"+id+"';";
         write(database,query);
     }
+    public static void delete_order(SQLiteDatabase database,String qrCode,int id){
+        String query = "DELETE FROM "+table_orderList+
+                " WHERE qrcode = '"+qrCode+"' and id = '"+id+"';";
+        write(database,query);
+    }
 
     public static String select_qrCode(String qrCode){
         return "select * from "+table_qrCodeList+" where qrcode = '"+qrCode+"' limit 1";

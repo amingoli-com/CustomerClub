@@ -84,7 +84,7 @@ public class ListOrderActivity extends AppCompatActivity {
                         }
                         break;
                     default:
-
+                        deleteOrder(id);
                         break;
                 }
             }
@@ -126,14 +126,12 @@ public class ListOrderActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات خرید را وارد کنید");
         builder.setView(view)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=1 && !getTextEditText(orderPrice).startsWith("0")){
                             Query.update_order(writeDatabase,QR_CODE,id_order,getTextEditText(orderPrice),getTextEditText(order_desc));
-                            recyclerView.removeAllViews();
-                            adapter.notifyDataSetChanged();
-                            itemList();
+                            resetItems();
                         }else {
                             Toast.makeText(ListOrderActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
                         }
@@ -151,7 +149,7 @@ public class ListOrderActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("توضیحات خرید");
         builder.setMessage(data)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setNegativeButton("بستن", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -160,6 +158,30 @@ public class ListOrderActivity extends AppCompatActivity {
                 }).show();
     }
 
+    private void deleteOrder(final int id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("مطمئن هستید که میخواهید سفارش را حذف کنید؟");
+        builder.setCancelable(true)
+                .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Query.delete_order(writeDatabase,QR_CODE,id);
+                        resetItems();
+                    }
+                })
+                .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
+    private void resetItems(){
+        recyclerView.removeAllViews();
+        adapter.notifyDataSetChanged();
+        itemList();
+    }
     private String getTextEditText(EditText editText){
         return editText.getText().toString().trim().replace(",","");
     }

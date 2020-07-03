@@ -62,6 +62,17 @@ public class TicketResultActivity extends AppCompatActivity {
     private TicketView ticketView;
     private String barcode = null;
 
+    private boolean onPause = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (onPause){
+            renderAllOrder();
+            onPause = false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +96,12 @@ public class TicketResultActivity extends AppCompatActivity {
         }else {
             addQrCode(true);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onPause = true;
     }
 
     @Override
@@ -234,13 +251,9 @@ public class TicketResultActivity extends AppCompatActivity {
         txtName.setText(name);
         txtTel.setText(FaNum.convert(tel));
         txtDesc.setText(FaNum.convert(desc));
-        if (renderLastOrder()!=null && renderLastOrder().length()>1)
-            txtLastDateOrder.setText(Tools.getFormattedDateSimple(Long.valueOf(renderLastOrder())));
-        txtTotalOrder.setText(FaNum.convert(String.valueOf(renderTotalOrder())));
-        txtPrice.setText(renderTotalPrice());
+        renderAllOrder();
         txtAddOrder.setText(getString(R.string.btn_buy_now));
         txtAddOrder.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-
         txtTel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -297,7 +310,7 @@ public class TicketResultActivity extends AppCompatActivity {
         }
     }
 
-    private String renderTotalPrice(){
+    private void renderTotalPrice(){
         int total_price = 0;
         Cursor cursor = Query.cursor(readDatabase,Query.select_order(barcode));
         if (cursor.getCount()>=1){
@@ -305,20 +318,27 @@ public class TicketResultActivity extends AppCompatActivity {
                 total_price = total_price + cursor.getInt( cursor.getColumnIndex("total_price") );
             }
         }
-        return Tools.getForamtPrice(total_price);
+        txtPrice.setText(Tools.getForamtPrice(total_price));
     }
 
-    private int renderTotalOrder(){
-        return Query.cursor(readDatabase,Query.select_order(barcode)).getCount();
+    private void renderTotalOrder(){
+        int count = Query.cursor(readDatabase,Query.select_order(barcode)).getCount();
+        txtTotalOrder.setText(FaNum.convert(String.valueOf(count)));
     }
 
-    private String renderLastOrder(){
+    private void renderLastOrder(){
         Cursor cursor = Query.cursor(readDatabase,Query.select_order(barcode));
         if (cursor.getCount()>=1){
             cursor.moveToLast();
-            return cursor.getString( cursor.getColumnIndex("date") );
+            txtLastDateOrder.setText(Tools.getFormattedDateSimple(
+                    Long.valueOf(cursor.getString( cursor.getColumnIndex("date") ))));
         }
-        return null;
+    }
+
+    private void renderAllOrder(){
+        renderLastOrder();
+        renderTotalPrice();
+        renderTotalOrder();
     }
 
 
