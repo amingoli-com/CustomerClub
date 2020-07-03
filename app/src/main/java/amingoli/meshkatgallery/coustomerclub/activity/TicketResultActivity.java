@@ -122,7 +122,7 @@ public class TicketResultActivity extends AppCompatActivity {
         final EditText desc = view.findViewById(R.id.desc);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات بارکد را وارد کنید");
-        builder.setMessage(barcode)
+        builder.setMessage(" شناسه بارکد: "+barcode)
                 .setView(view)
                 .setCancelable(false)
                 .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
@@ -163,8 +163,7 @@ public class TicketResultActivity extends AppCompatActivity {
         orderPrice.addTextChangedListener(new NumberTextWatcher(orderPrice));
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات خرید را وارد کنید");
-        builder.setMessage("")
-                .setView(view)
+        builder.setView(view)
                 .setCancelable(false)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
