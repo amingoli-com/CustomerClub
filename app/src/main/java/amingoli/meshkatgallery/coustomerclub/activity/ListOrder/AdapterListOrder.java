@@ -17,11 +17,11 @@ import amingoli.meshkatgallery.coustomerclub.R;
 public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.ViewHolder> implements View.OnClickListener {
 
 
-    private List<ListOrderModel> itemList;
+    private List<ModelListOrder> itemList;
     private listener listener;
     Context context;
 
-    public AdapterListOrder(List<ListOrderModel> itemIntroList, AdapterListOrder.listener listener, Context context) {
+    public AdapterListOrder(List<ModelListOrder> itemIntroList, AdapterListOrder.listener listener, Context context) {
         this.itemList = itemIntroList;
         this.listener = listener;
         this.context = context;
@@ -36,7 +36,7 @@ public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.View
 
     @Override
     public void onBindViewHolder(@NonNull AdapterListOrder.ViewHolder holder, final int position) {
-        ListOrderModel item = itemList.get(position);
+        ModelListOrder item = itemList.get(position);
         holder.no.setText(item.getNo());
         holder.date.setText(item.getDate());
         holder.price.setText(item.getPrice());

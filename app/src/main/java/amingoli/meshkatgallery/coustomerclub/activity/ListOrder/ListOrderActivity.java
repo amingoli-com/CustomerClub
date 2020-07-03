@@ -46,7 +46,7 @@ public class ListOrderActivity extends AppCompatActivity {
         readDatabase.close();
     }
 
-    private List<ListOrderModel> list_main = null;
+    private List<ModelListOrder> list_main = null;
     private AdapterListOrder adapter;
     private void itemList(){
         list_main = new ArrayList<>();
@@ -71,7 +71,7 @@ public class ListOrderActivity extends AppCompatActivity {
             String date = cursor.getString(cursor.getColumnIndex("date"));
             String total_price = cursor.getString(cursor.getColumnIndex("total_price"));
             String desc = cursor.getString(cursor.getColumnIndex("desc"));
-            list_main.add(new ListOrderModel(String.valueOf(no),total_price,date,desc));
+            list_main.add(new ModelListOrder(String.valueOf(no),total_price,date,desc));
         }
     }
 

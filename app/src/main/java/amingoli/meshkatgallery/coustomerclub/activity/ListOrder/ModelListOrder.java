@@ -1,9 +1,9 @@
 package amingoli.meshkatgallery.coustomerclub.activity.ListOrder;
 
-public class ListOrderModel {
+public class ModelListOrder {
     String no,price,date,desc;
 
-    public ListOrderModel(String no, String price, String date, String desc) {
+    public ModelListOrder(String no, String price, String date, String desc) {
         this.no = no;
         this.price = price;
         this.date = date;
