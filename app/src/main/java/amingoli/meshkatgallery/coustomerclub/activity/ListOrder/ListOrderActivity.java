@@ -77,6 +77,11 @@ public class ListOrderActivity extends AppCompatActivity {
                         updateOrder(date,id,price,desc);
                         break;
                     case "view_desc":
+                        if (!TextUtils.isEmpty(desc)){
+                            showDesc(desc);
+                        }else {
+                            Toast.makeText(ListOrderActivity.this, "خالی", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     default:
 
@@ -120,14 +125,12 @@ public class ListOrderActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات خرید را وارد کنید");
-        builder.setMessage("")
-                .setView(view)
+        builder.setView(view)
                 .setCancelable(false)
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=1 && !getTextEditText(orderPrice).startsWith("0")){
                             Query.update_order(writeDatabase,QR_CODE,id_order,getTextEditText(orderPrice),getTextEditText(order_desc));
-                            Toast.makeText(ListOrderActivity.this, getTextEditText(orderPrice), Toast.LENGTH_SHORT).show();
                             recyclerView.removeAllViews();
                             adapter.notifyDataSetChanged();
                             itemList();
@@ -137,6 +140,19 @@ public class ListOrderActivity extends AppCompatActivity {
                     }
                 })
                 .setNegativeButton("لغو", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
+    private void showDesc(final String data){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("توضیحات خرید");
+        builder.setMessage(data)
+                .setCancelable(false)
+                .setNegativeButton("بستن", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
