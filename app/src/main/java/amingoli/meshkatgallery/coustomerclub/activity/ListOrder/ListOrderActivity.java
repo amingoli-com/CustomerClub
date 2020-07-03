@@ -64,8 +64,10 @@ public class ListOrderActivity extends AppCompatActivity {
     private List<ModelListOrder> list_main = null;
     private AdapterListOrder adapter;
     private RecyclerView recyclerView;
+    private View box_empty;
     private void itemList(){
         list_main = new ArrayList<>();
+        box_empty = findViewById(R.id.box_empty);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         addItemToList();
@@ -95,6 +97,13 @@ public class ListOrderActivity extends AppCompatActivity {
     private void addItemToList(){
         int no = 0;
         Cursor cursor = Query.cursor(readDatabase,Query.select_order(QR_CODE));
+        if (cursor.getCount()>0){
+            box_empty.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }else {
+            box_empty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
         while (cursor.moveToNext()){
             no++;
             int id = cursor.getInt(cursor.getColumnIndex("id"));
