@@ -25,7 +25,7 @@ public class FaNum {
         return faNumbers;
     }
 
-    public static int convertToEN(String faNumbers) {
+    public static String convertToEN(String faNumbers) {
         String[][] mChars = new String[][]{
                 {"0", "۰"},
                 {"1", "۱"},
@@ -51,7 +51,7 @@ public class FaNum {
 
         }
 
-        return Integer.parseInt(faNumbers);
+        return faNumbers;
     }
 
 }
