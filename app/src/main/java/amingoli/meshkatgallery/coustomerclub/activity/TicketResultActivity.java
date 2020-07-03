@@ -36,6 +36,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.activity.ListOrder.ListOrderActivity;
 import amingoli.meshkatgallery.coustomerclub.util.FaNum;
 import amingoli.meshkatgallery.coustomerclub.util.NumberTextWatcher;
 import amingoli.meshkatgallery.coustomerclub.util.TicketView;
@@ -227,7 +228,7 @@ public class TicketResultActivity extends AppCompatActivity {
      * Rendering movie details on the ticket
      */
     @SuppressLint("SetTextI18n")
-    private void renderTick(String barcode, String name, final String tel, String date, String desc) {
+    private void renderTick(final String barcode, String name, final String tel, String date, String desc) {
         renderImageCode(barcode);
         qr_code.setText(barcode);
         crated_at.setText(getString(R.string.crated_at)+" "+Tools.getFormattedDateSimple(Long.valueOf(date)));
@@ -264,7 +265,9 @@ public class TicketResultActivity extends AppCompatActivity {
         order_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent goToListOrder = new Intent(TicketResultActivity.this, ListOrderActivity.class);
+                goToListOrder.putExtra("QR_CODE",barcode);
+                startActivity(goToListOrder);
             }
         });
 

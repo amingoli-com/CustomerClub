@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layoutDirection="rtl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/no"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="1"
+        android:text="1"
+        />
+
+    <TextView
+        android:id="@+id/price"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="3"
+        android:text="۲۷,۰۰۰ تومان"
+        />
+
+    <TextView
+        android:id="@+id/date"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="4"
+        android:text="۲۷ خرداد ۱۳۹۹ ساعت ۱۸:۳۰"
+        />
+
+    <ImageView
+        android:id="@+id/desc"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="1"
+        android:src="@drawable/ic_info"
+        />
+
+    <ImageView
+        android:id="@+id/edit"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="1"
+        android:src="@drawable/ic_edit"
+        />
+    <ImageView
+        android:id="@+id/delete"
+        style="@style/textviewItemListOrder"
+        android:layout_weight="1"
+        android:src="@drawable/ic_delete"
+        />
+
+</LinearLayout>
