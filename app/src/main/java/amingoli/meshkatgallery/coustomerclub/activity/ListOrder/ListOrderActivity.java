@@ -193,6 +193,6 @@ public class ListOrderActivity extends AppCompatActivity {
         itemList();
     }
     private String getTextEditText(EditText editText){
-        return FaNum.convertToEN(editText.getText().toString().trim().replace(",",""))+"";
+        return String.valueOf(FaNum.convertToEN(editText.getText().toString().trim()));
     }
 }
