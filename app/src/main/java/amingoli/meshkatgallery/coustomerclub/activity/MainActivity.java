@@ -55,11 +55,13 @@ public class MainActivity extends AppCompatActivity {
             case "tel":
                 addQrCode();
                 break;
-
             case "scan":
                 if (permission()){
                     startScanActivity();
                 }
+                break;
+            default:
+                aboutMe();
                 break;
         }
     }
@@ -113,6 +115,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        builder.show();
+    }
+
+    private void aboutMe(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("ساخته شده توسط امین گلی")
+                .setCancelable(true)
+                .setPositiveButton("ارتباط با من", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://AminGoli.com")));
+                    }
+                })
+                .setNegativeButton("بستن", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.FaNum;
 import amingoli.meshkatgallery.coustomerclub.util.Tools;
 
 public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.ViewHolder> {
@@ -37,7 +38,7 @@ public class AdapterListOrder extends RecyclerView.Adapter<AdapterListOrder.View
     @Override
     public void onBindViewHolder(@NonNull AdapterListOrder.ViewHolder holder, final int position) {
         final ModelListOrder item = itemList.get(position);
-        holder.no.setText(item.getNo());
+        holder.no.setText(FaNum.convert(item.getNo()));
         holder.date.setText(Tools.getFormattedDateSimple2(Long.valueOf(item.getDate())));
         holder.price.setText(Tools.getForamtPrice(Integer.parseInt(item.getPrice())));
 

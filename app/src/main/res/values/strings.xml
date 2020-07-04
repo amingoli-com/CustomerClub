@@ -10,7 +10,7 @@
     <string name="btn_coming_soon">بزودی</string>
     <string name="msg_no_ticket_found">No ticket found. Try scanning the QR Codes from http://api.androidhive.info/QR Codes/</string>
     <string name="scan_qr_code">بارکدی را اسکن کنید</string>
-    <string name="main_activity_bottom_logo">با اسکن کردن کارت ها به اطلاعات خرید مشتریان خود دسترسی پیدا کنید</string>
+    <string name="main_activity_bottom_logo">با اسکن کارت ها و یا جستجو تلفن، به اطلاعات و تاریخچه خرید مشتریان خود دسترسی پیدا کنید</string>
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="tel">شماره تلفن</string>
     <string name="desc">توضیحات</string>
