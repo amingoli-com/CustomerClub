@@ -140,7 +140,7 @@ public class ListOrderActivity extends AppCompatActivity {
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=1 && !getTextEditText(orderPrice).startsWith("0")){
-                            Query.update_order(writeDatabase,QR_CODE,id_order,getTextEditText(orderPrice),getTextEditText(order_desc));
+                            Query.update_order(writeDatabase,QR_CODE,id_order,FaNum.convertToEN(getTextEditText(orderPrice)),getTextEditText(order_desc));
                             resetItems();
                         }else {
                             Toast.makeText(ListOrderActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
@@ -193,6 +193,6 @@ public class ListOrderActivity extends AppCompatActivity {
         itemList();
     }
     private String getTextEditText(EditText editText){
-        return FaNum.convertToEN(editText.getText().toString().trim());
+        return editText.getText().toString().trim();
     }
 }

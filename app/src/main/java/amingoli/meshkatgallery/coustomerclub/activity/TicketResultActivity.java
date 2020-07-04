@@ -128,9 +128,9 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (isNew){
-                            Query.insert_qrCode(writeDatabase,barcode,String.valueOf(getDay().getTimeInMillis()),getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                            Query.insert_qrCode(writeDatabase,barcode,String.valueOf(getDay().getTimeInMillis()),getTextEditText(name),FaNum.convertToEN(getTextEditText(tel)),getTextEditText(desc));
                         }else {
-                            Query.update_qrCode(writeDatabase,barcode,getTextEditText(name),getTextEditText(tel),getTextEditText(desc));
+                            Query.update_qrCode(writeDatabase,barcode,getTextEditText(name),FaNum.convertToEN(getTextEditText(tel)),getTextEditText(desc));
                         }
                         searchBarcode();
                     }
@@ -168,7 +168,7 @@ public class TicketResultActivity extends AppCompatActivity {
                 .setPositiveButton("ثبت", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (getTextEditText(orderPrice).length()>=1 && !getTextEditText(orderPrice).startsWith("0")){
-                            Query.insert_order(writeDatabase,date,getTextEditText(orderPrice),barcode,getTextEditText(order_desc));
+                            Query.insert_order(writeDatabase,date,FaNum.convertToEN(getTextEditText(orderPrice)),barcode,getTextEditText(order_desc));
                             searchBarcode();
                         }else {
                             Toast.makeText(TicketResultActivity.this, "مبلغی وارد کنید", Toast.LENGTH_SHORT).show();
@@ -351,7 +351,7 @@ public class TicketResultActivity extends AppCompatActivity {
     }
 
     private String getTextEditText(EditText editText){
-        return FaNum.convertToEN(editText.getText().toString().trim());
+        return editText.getText().toString().trim();
     }
 
     private void showNoTicket() {
