@@ -25,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import amingoli.meshkatgallery.coustomerclub.BuildConfig;
 import amingoli.meshkatgallery.coustomerclub.R;
 import amingoli.meshkatgallery.coustomerclub.util.FaNum;
 import amingoli.meshkatgallery.coustomerclub.util.database.Database;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void aboutMe(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("ساخته شده توسط امین گلی")
+        builder.setMessage("ساخته شده توسط امین گلی"+"\n"+"نسخه "+ FaNum.convert(BuildConfig.VERSION_NAME))
                 .setCancelable(true)
                 .setPositiveButton("ارتباط با من", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
