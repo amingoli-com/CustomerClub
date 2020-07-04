@@ -28,44 +28,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // making toolbar transparent
         transparentToolbar();
-
         setContentView(R.layout.activity_main);
+    }
 
-        findViewById(R.id.btn_scan).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void click(View view) {
+        switch (view.getTag().toString()){
+            case "tel":
+                
+                break;
+
+            case "scan":
                 if (permission()){
                     startScanActivity();
                 }
-            }
-        });
-    findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("درباره ما")
-                        .setMessage("طراحی شده به درخواست گالری بدلیجات مشکات توسط امین گلی");
-                builder.setCancelable(true)
-                        .setPositiveButton("تماس با من", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent intent = new Intent(Intent.ACTION_DIAL);
-                                intent.setData(Uri.parse("tel:09100530593"));
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("بستن", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .show();
-            }
-        });
+                break;
+        }
     }
 
     private void transparentToolbar() {
