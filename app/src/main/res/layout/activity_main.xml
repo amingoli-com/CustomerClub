@@ -92,7 +92,7 @@
                     android:layout_height="@dimen/_40sdp">
 
                     <ImageView
-                        android:padding="@dimen/_5sdp"
+                        android:padding="@dimen/_7sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_scan"
                         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                     android:layout_height="@dimen/_40sdp">
 
                     <ImageView
-                        android:padding="@dimen/_5sdp"
+                        android:padding="@dimen/_7sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_phone"
                         android:layout_width="match_parent"

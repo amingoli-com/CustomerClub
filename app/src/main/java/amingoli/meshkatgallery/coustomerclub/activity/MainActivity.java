@@ -6,14 +6,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -21,9 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import amingoli.meshkatgallery.coustomerclub.R;
+import amingoli.meshkatgallery.coustomerclub.util.FaNum;
+import amingoli.meshkatgallery.coustomerclub.util.database.Database;
 import amingoli.meshkatgallery.coustomerclub.util.database.Query;
 
 public class MainActivity extends AppCompatActivity {
+
+    private SQLiteDatabase writeDatabase, readDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +40,20 @@ public class MainActivity extends AppCompatActivity {
         // making toolbar transparent
         transparentToolbar();
         setContentView(R.layout.activity_main);
+        DATABASE();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        writeDatabase.close();
+        readDatabase.close();
     }
 
     public void click(View view) {
         switch (view.getTag().toString()){
             case "tel":
-                
+                addQrCode();
                 break;
 
             case "scan":
@@ -47,6 +64,80 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Alert Dialog
+     * */
+    private void addQrCode(){
+        View view = View.inflate(this, R.layout.content_dialog_search_by_tel, null);
+        final EditText edt_tel = view.findViewById(R.id.edt_tel);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("شماره تلفن را وارد کنید")
+                .setView(view)
+                .setCancelable(true)
+                .setPositiveButton("جستجو", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String tel = FaNum.convertToEN(edt_tel.getText().toString());
+                        if (tel.length()>7 && tel.length()<=15){
+                            if (barcodeWasSaved(tel)){
+                                showQrCode(tel);
+                            }else {
+                                dialogDoYouWantAddQrCodeByThisTel(tel);
+                            }
+                        }else {
+                            Toast.makeText(MainActivity.this, "قالب شماره تلفن صحیح نیست!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+        builder.show();
+    }
+
+    private boolean barcodeWasSaved(String tel){
+        return Query.cursor(readDatabase,Query.select_qrCodeByTel(tel)).getCount()>0;
+    }
+
+    private void showQrCode(String tel){
+        Cursor cursor = Query.cursor(readDatabase,Query.select_qrCodeByTel(tel));
+        cursor.moveToFirst();
+        goToTicketResult(cursor.getString(cursor.getColumnIndex("qrcode")));
+    }
+
+    private void dialogDoYouWantAddQrCodeByThisTel(final String tel){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("چنین شماره یافت نشد")
+                .setMessage("آیا میخواهید بارکدی با این شماره تلفن ثبت گردد؟")
+                .setCancelable(true)
+                .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        goToTicketResult(tel);
+                    }
+                })
+                .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        builder.show();
+    }
+
+    private void goToTicketResult(String QR_CODE){
+        Intent goToTicket = new Intent(MainActivity.this,TicketResultActivity.class);
+        goToTicket.putExtra("code",QR_CODE);
+        startActivity(goToTicket);
+    }
+
+    /**
+     * DataBase
+     * */
+    private void DATABASE(){
+        writeDatabase = new Database(this).getWritableDatabase();
+        readDatabase = new Database(this).getReadableDatabase();
+    }
+
+    /**
+     * Other
+     * */
     private void transparentToolbar() {
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);

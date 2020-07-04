@@ -4,12 +4,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import amingoli.meshkatgallery.coustomerclub.util.FaNum;
+
 import static amingoli.meshkatgallery.coustomerclub.util.database.Database.table_orderList;
 import static amingoli.meshkatgallery.coustomerclub.util.database.Database.table_qrCodeList;
 
 public class Query {
     private static String TAG = "amingoli78-Query";
     public static void insert_qrCode(SQLiteDatabase database,String qrCode, String cratedAt, String name, String tel, String desc){
+        FaNum.convertToEN(tel);
         String query = "INSERT INTO " + table_qrCodeList
                 + " (qrcode,crated_at,name,tel,desc) "
                 + " Values ('"+qrCode+"','"+cratedAt+"','"+name+"','"+tel+"','"+desc+"') ";
@@ -25,6 +28,7 @@ public class Query {
     }
 
     public static void update_qrCode(SQLiteDatabase database,String qrCode, String name, String tel, String desc){
+        FaNum.convertToEN(tel);
         String query = "UPDATE "+table_qrCodeList +
                 " SET name = '"+name+"' , tel = '"+tel+"' , desc = '"+desc+"' " +
                 " WHERE qrcode = '"+qrCode+"' ;";
@@ -46,6 +50,10 @@ public class Query {
 
     public static String select_qrCode(String qrCode){
         return "select * from "+table_qrCodeList+" where qrcode = '"+qrCode+"' limit 1";
+    }
+    public static String select_qrCodeByTel(String tel){
+        FaNum.convertToEN(tel);
+        return "select * from "+table_qrCodeList+" where tel = '"+tel+"' limit 1";
     }
     public static String select_order(String qrCode){
         return "select * from "+table_orderList+" where qrcode = '"+qrCode+"' ORDER BY date";

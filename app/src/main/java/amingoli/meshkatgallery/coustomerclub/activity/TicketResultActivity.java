@@ -113,13 +113,16 @@ public class TicketResultActivity extends AppCompatActivity {
 
 
     /**
-    * Alert Dialog
-    * */
+     * Alert Dialog
+     * */
     private void addQrCode(final boolean isNew){
         View view = View.inflate(this, R.layout.content_dialog_add_qrcode, null);
         final EditText name = view.findViewById(R.id.name);
         final EditText tel = view.findViewById(R.id.tel);
         final EditText desc = view.findViewById(R.id.desc);
+        if (barcode.startsWith("09") && barcode.length()>7 && barcode.length()<=15){
+            tel.setText(barcode);
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اطلاعات بارکد را وارد کنید");
         builder.setMessage(" شناسه بارکد: "+barcode)
@@ -133,6 +136,12 @@ public class TicketResultActivity extends AppCompatActivity {
                             Query.update_qrCode(writeDatabase,barcode,getTextEditText(name),FaNum.convertToEN(getTextEditText(tel)),getTextEditText(desc));
                         }
                         searchBarcode();
+                    }
+                })
+                .setNegativeButton("لغو", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
                     }
                 });
         if (!isNew){
