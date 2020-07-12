@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "132578649000",
+    "firebase_url": "https://customer-club-d8e32.firebaseio.com",
+    "project_id": "customer-club-d8e32",
+    "storage_bucket": "customer-club-d8e32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132578649000:android:56b372104eb4944af6339d",
+        "android_client_info": {
+          "package_name": "amingoli.com.coustomerclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132578649000-nl0hn1n3p1tdg0299sc9voeictgmpatf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT4ZL02eqC_03CmgPGFhDXp0e-ljJ0cF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132578649000-nl0hn1n3p1tdg0299sc9voeictgmpatf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
