@@ -124,9 +124,8 @@ public class TicketResultActivity extends AppCompatActivity {
             tel.setText(barcode);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("اطلاعات بارکد را وارد کنید");
-        builder.setMessage(" شناسه بارکد: "+barcode)
-                .setView(view)
+        builder.setTitle("اطلاعات مشتری را وارد کنید");
+        builder.setView(view)
                 .setCancelable(false)
                 .setPositiveButton("ذخیره", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

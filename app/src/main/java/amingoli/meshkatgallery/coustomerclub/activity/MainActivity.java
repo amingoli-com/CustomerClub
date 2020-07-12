@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void dialogDoYouWantAddQrCodeByThisTel(final String tel){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("چنین شماره یافت نشد")
-                .setMessage("آیا میخواهید بارکدی با این شماره تلفن ثبت گردد؟")
+        builder.setTitle("ثبت مشتری جدید")
+                .setMessage("آیا میخواهید مشتری جدید با این شماره تلفن ثبت گردد؟")
                 .setCancelable(true)
                 .setPositiveButton("بله", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

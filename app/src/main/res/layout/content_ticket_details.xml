@@ -78,7 +78,7 @@
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textSize="@dimen/lbl_directory"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
